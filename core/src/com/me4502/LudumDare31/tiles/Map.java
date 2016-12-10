@@ -1,10 +1,5 @@
 package com.me4502.LudumDare31.tiles;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -13,19 +8,24 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.me4502.LudumDare31.LudumDare31;
 import com.me4502.LudumDare31.entities.Bubble;
 import com.me4502.LudumDare31.entities.Entity;
-import com.me4502.LudumDare31.entities.Staff.StaffType;
 import com.me4502.LudumDare31.entities.Patient.HospitalBed;
 import com.me4502.LudumDare31.entities.Patient.Patient;
 import com.me4502.LudumDare31.entities.Patient.PatientType;
+import com.me4502.LudumDare31.entities.StaffType;
 import com.me4502.LudumDare31.injuries.Injury;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Map {
 
-	Sprite[][] floorTiles;
-	Sprite[] leftWallTiles;
-	Sprite[] rightWallTiles;
+	private Sprite[][] floorTiles;
+	private Sprite[] leftWallTiles;
+	private Sprite[] rightWallTiles;
 
-	public List<Entity> entities;
+	public List<Entity> entities = new ArrayList<>();
 
 	public Room[] rooms;
 
@@ -33,22 +33,14 @@ public class Map {
 
 	public boolean hasLost = false;
 
-	Random random;
-
-	GlyphLayout glyphLayout = new GlyphLayout();
+	private GlyphLayout glyphLayout = new GlyphLayout();
 
 	public Map(int width, int height) {
-
-		random = new Random();
-
-		entities = new ArrayList<Entity>();
-
 		floorTiles = new Sprite[width][height];
 
 		for(int x = 0; x < floorTiles.length; x++) {
 			for(int y = 0; y < floorTiles[x].length; y++) {
-
-				floorTiles[x][y] = new Sprite(LudumDare31.instance.floors[random.nextInt(LudumDare31.instance.floors.length)]);
+				floorTiles[x][y] = new Sprite(LudumDare31.instance.floors[ThreadLocalRandom.current().nextInt(LudumDare31.instance.floors.length)]);
 				floorTiles[x][y].setSize(1, 1);
 				floorTiles[x][y].setPosition(x, y);
 			}
@@ -59,7 +51,6 @@ public class Map {
 		rooms = new Room[rightWallTiles.length/2 ];
 
 		for(int x = 0; x < rightWallTiles.length; x++) {
-
 			if(x > 0 && x % 2 == 1) {
 				rightWallTiles[x] = new Sprite(LudumDare31.instance.door_clean);
 				rightWallTiles[x].setSize(1, 2.6f);
@@ -77,7 +68,6 @@ public class Map {
 		leftWallTiles = new Sprite[height];
 
 		for(int x = 0; x < leftWallTiles.length; x++) {
-
 			if(x == 1 || x == 2 || x == 6) {
 				leftWallTiles[x] = new Sprite(x == 1 ? LudumDare31.instance.reception_left : x == 6 ? LudumDare31.instance.poster : LudumDare31.instance.reception_right);
 				leftWallTiles[x].setSize(1, 2.6f);
@@ -92,46 +82,42 @@ public class Map {
 		}
 
 		Entity ent = new HospitalBed(LudumDare31.instance.bed_top, new Patient(PatientType.getRandom(), Injury.generateInjury()));
-
 		ent.setPosition(-8 + 0.1f,0 + 0.1f);
 
 		entities.add(ent);
 
-		for(int i = 0; i < 2; i++)
-			entities.add(new Bubble(StaffType.DOCTOR, i));
-		for(int i = 0; i < 2; i++)
-			entities.add(new Bubble(StaffType.NURSE, i+2));
+		for(int i = 0; i < 2; i++) {
+            entities.add(new Bubble(StaffType.DOCTOR, i));
+        }
+		for(int i = 0; i < 2; i++) {
+            entities.add(new Bubble(StaffType.NURSE, i + 2));
+        }
 	}
 
 	public void render(SpriteBatch floorBatch, SpriteBatch leftWallBatch, SpriteBatch rightWallBatch) {
 
 		floorBatch.begin();
-		for(int x = 0; x < floorTiles.length; x++) {
-			for(int y = 0; y < floorTiles[x].length; y++) {
-
-				Sprite tile = floorTiles[x][y];
-				if(tile == null) continue;
-
-				tile.draw(floorBatch);
-			}
-		}
+        for (Sprite[] floorTile : floorTiles) {
+            for (Sprite tile : floorTile) {
+                if (tile == null) continue;
+                tile.draw(floorBatch);
+            }
+        }
 		floorBatch.end();
 
 		leftWallBatch.begin();
 
-		for(int x = 0; x < leftWallTiles.length; x++) {
-
-			leftWallTiles[x].draw(leftWallBatch);
-		}
+        for (Sprite leftWallTile : leftWallTiles) {
+            leftWallTile.draw(leftWallBatch);
+        }
 
 		leftWallBatch.end();
 
 		rightWallBatch.begin();
 
-		for(int x = 0; x < rightWallTiles.length; x++) {
-
-			rightWallTiles[x].draw(rightWallBatch);
-		}
+        for (Sprite rightWallTile : rightWallTiles) {
+            rightWallTile.draw(rightWallBatch);
+        }
 
 		rightWallBatch.end();
 
@@ -153,7 +139,6 @@ public class Map {
 		int bedCount = 0;
 
 		while(iter.hasNext()) {
-
 			Entity ent = iter.next();
 			if(ent instanceof HospitalBed)
 				if(((HospitalBed) ent).passenger == null)

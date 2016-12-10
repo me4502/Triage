@@ -1,7 +1,6 @@
 package com.me4502.LudumDare31.injuries;
 
 public enum InjurySeverity {
-
 	TRIVIAL("Trivial", 0.5f, 0.9f, 0.1f),
 	MINOR("Minor", 1.0f, 0.6f, 0.6f),
 	MAJOR("Major", 2.5f, 0.4f, 0.29f),
@@ -20,21 +19,18 @@ public enum InjurySeverity {
 	}
 
 	public float getScoreMultiplier() {
-
 		return multiplier;
 	}
 
 	public float getHealthMultiplier() {
-
 		return healthMultiplier;
 	}
 
 	public static InjurySeverity convertFloatToSeverity(float input) {
-
 		float tmp = 0f;
 
 		for(InjurySeverity sev : values()) {
-			if(input < tmp+sev.chance)
+			if(input < tmp + sev.chance)
 				return sev;
 
 			tmp += sev.chance;

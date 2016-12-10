@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public abstract class Entity extends Sprite {
 
 	public Entity(Texture texture) {
-
 		super(texture);
 	}
 

@@ -16,12 +16,12 @@ public class HospitalBed extends Entity {
 
 	public Patient passenger;
 
-	Sprite back_side, back_end;
-	Sprite side, end;
+	private Sprite back_side, back_end;
+	private Sprite side, end;
 
 	public int rotation = 0;
 
-	Sprite bar;
+	private Sprite bar;
 
 	public HospitalBed(Texture texture, Patient passenger) {
 
@@ -96,10 +96,9 @@ public class HospitalBed extends Entity {
 		}
 	}
 
-	Room destination = null;
+	private Room destination = null;
 
 	public void doMoveTick(final Bubble staff) {
-
 		passenger.health += 0.001f;
 
 		if(destination == null || !destination.isEmpty()) {
@@ -153,7 +152,6 @@ public class HospitalBed extends Entity {
 
 	@Override
 	public void render(SpriteBatch top, SpriteBatch left, SpriteBatch right) {
-
 		if(passenger == null) return;
 
 		passenger.health -= 0.001f;
@@ -176,22 +174,18 @@ public class HospitalBed extends Entity {
 		Matrix4 topOrig = top.getTransformMatrix().cpy();
 
 		if(rotation >= 0 && rotation < 90) {
-
 			right.getTransformMatrix().translate(getX()-1f,0,-getY()).rotate(new Vector3(0,1,0), rotation);
 			left.getTransformMatrix().translate(leftDepthTransform = -getY(),0, -getX()+1f).rotate(new Vector3(0,1,0), rotation);
 			top.getTransformMatrix().translate(0,0f,-0f).rotate(new Vector3(0,0,1), rotation);
 		} else if(rotation >= 90 && rotation < 180) {
-
 			right.getTransformMatrix().translate(getY(), 0, -getX()+1f).rotate(new Vector3(0,1,0), rotation);
 			left.getTransformMatrix().translate(leftDepthTransform = -getX()+1f,0, -getY()).rotate(new Vector3(0,1,0), rotation);
 			top.getTransformMatrix().translate(1f, -0.2f, 0.2f).rotate(new Vector3(0,0,1), rotation);
 		} else if(rotation >= 180 && rotation < 270) {
-
 			right.getTransformMatrix().translate(getY(), 0, -getX()+1+0.2f).rotate(new Vector3(0,1,0), rotation);
 			left.getTransformMatrix().translate(leftDepthTransform = -getX()+1+0.2f,0, -getY()).rotate(new Vector3(0,1,0), rotation);
 			top.getTransformMatrix().translate(1f, -0.4f, 0.2f).rotate(new Vector3(0,0,1), rotation);
 		} else if(rotation >= 270 && rotation < 360) {
-
 			right.getTransformMatrix().translate(getY(), 0, getX()-1-0.2f).rotate(new Vector3(0,1,0), rotation);
 			left.getTransformMatrix().translate(leftDepthTransform = getX()+1-0.2f,0,-getY()).rotate(new Vector3(0,1,0), rotation);
 			top.getTransformMatrix().translate(-1f, 1f+0.2f, 1).rotate(new Vector3(0,0,1), rotation);
