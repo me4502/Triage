@@ -23,7 +23,11 @@ import com.me4502.LudumDare31.entities.Patient.HospitalBed;
 import com.me4502.LudumDare31.tiles.Map;
 import com.me4502.LudumDare31.tiles.Room;
 
+import java.util.Random;
+
 public class LudumDare31 extends ApplicationAdapter implements InputProcessor {
+
+	public static final Random RANDOM = new Random();
 
 	public static LudumDare31 instance;
 

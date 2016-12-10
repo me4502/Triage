@@ -1,8 +1,7 @@
 package com.me4502.LudumDare31.entities.Patient;
 
 import com.badlogic.gdx.graphics.Texture;
-
-import java.util.concurrent.ThreadLocalRandom;
+import com.me4502.LudumDare31.LudumDare31;
 
 public enum PatientType {
 	DERPY("Derpy", new Texture("data/entities/patients/derpy.png")),
@@ -25,6 +24,6 @@ public enum PatientType {
 	}
 
 	public static PatientType getRandom() {
-		return values()[ThreadLocalRandom.current().nextInt(values().length)];
+		return values()[LudumDare31.RANDOM.nextInt(values().length)];
 	}
 }
