@@ -4,20 +4,19 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
 import com.me4502.LudumDare31.LudumDare31;
-import com.me4502.LudumDare31.entities.Staff.StaffType;
 import com.me4502.LudumDare31.entities.Patient.HospitalBed;
 import com.me4502.LudumDare31.tiles.Room;
 
 public class Bubble extends Entity {
 
-	StaffType type;
+	private StaffType type;
 
-	Sprite button;
+	private Sprite button;
 
-	Room boundRoom;
-	Sprite boundSprite;
+	private Room boundRoom;
+	private Sprite boundSprite;
 
-	float origX;
+	private float origX;
 
 	public Bubble(StaffType type, int offset) {
 		super(type == StaffType.DOCTOR ? LudumDare31.instance.doctor_bubble : LudumDare31.instance.nurse_bubble);
@@ -37,29 +36,23 @@ public class Bubble extends Entity {
 
 	@Override
 	public void render(SpriteBatch top, SpriteBatch left, SpriteBatch right) {
-
-		//button.setPosition(getX(), getY());
-
 		Matrix4 orig = right.getTransformMatrix().cpy();
 
 		if(!equals(LudumDare31.instance.lastSelectedTile)) {
 			if(boundRoom != null) {
-				//setPosition(boundRoom.door.getX(), boundRoom.door.getY());
 				button.setPosition(getX(), getY());
 			} else if(boundSprite != null) {
-				//setPosition(boundSprite.getX(), boundSprite.getY());
 				button.setPosition(getX(), getY());
 			}
 		}
 
 		if(boundSprite != null) {
-
 			//Okay - Let's move.
 			((HospitalBed) boundSprite).doMoveTick(this);
 
 			if(boundSprite != null) {
 				if(((HospitalBed) boundSprite).rotation == 0)
-					setX(((HospitalBed) boundSprite).getX() - 7);
+					setX(boundSprite.getX() - 7);
 				right.getTransformMatrix().translate(0, 0, ((HospitalBed) boundSprite).leftDepthTransform + 7);
 
 				if(((HospitalBed) boundSprite).passenger == null) {
@@ -70,12 +63,11 @@ public class Bubble extends Entity {
 		}
 
 		if(boundRoom != null) {
-
 			if(!boundRoom.isEmpty()) {
-
 				boundRoom.treat(type);
-			} else
+			} else {
 				setStartPosition();
+			}
 		}
 
 		right.begin();
@@ -87,12 +79,10 @@ public class Bubble extends Entity {
 	}
 
 	public void snapBack() {
-
 		setPosition(button.getX(), button.getY());
 	}
 
 	public void setStartPosition() {
-
 		boundSprite = null;
 		boundRoom = null;
 		setY(-4);
@@ -102,7 +92,6 @@ public class Bubble extends Entity {
 	}
 
 	public void setRoom(Room boundRoom) {
-
 		boundSprite = null;
 		this.boundRoom = boundRoom;
 
@@ -110,7 +99,6 @@ public class Bubble extends Entity {
 	}
 
 	public void setBed(Sprite boundSprite) {
-
 		boundRoom = null;
 		this.boundSprite = boundSprite;
 

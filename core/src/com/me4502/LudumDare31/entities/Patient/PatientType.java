@@ -1,11 +1,10 @@
 package com.me4502.LudumDare31.entities.Patient;
 
-import java.util.Random;
-
 import com.badlogic.gdx.graphics.Texture;
 
-public enum PatientType {
+import java.util.concurrent.ThreadLocalRandom;
 
+public enum PatientType {
 	DERPY("Derpy", new Texture("data/entities/patients/derpy.png")),
 	AMBER("Amber", new Texture("data/entities/patients/amber.png")),
 	LEE("Lee", new Texture("data/entities/patients/lee.png")),
@@ -16,21 +15,16 @@ public enum PatientType {
 	private String name;
 	private Texture texture;
 
-	private static final Random random = new Random();
-
 	PatientType(String name, Texture texture) {
-
 		this.name = name;
 		this.texture = texture;
 	}
 
 	public Texture getTexture() {
-
 		return texture;
 	}
 
 	public static PatientType getRandom() {
-
-		return values()[random.nextInt(values().length)];
+		return values()[ThreadLocalRandom.current().nextInt(values().length)];
 	}
 }

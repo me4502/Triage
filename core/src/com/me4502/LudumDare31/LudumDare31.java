@@ -49,13 +49,13 @@ public class LudumDare31 extends ApplicationAdapter implements InputProcessor {
 	public Sound backgroundAudio;
 	public Sound doorNoise;
 
-	OrthographicCamera cam;
+	private OrthographicCamera cam;
 
-	final Matrix4 floorMatrix = new Matrix4();
-	final Matrix4 wallMatrix = new Matrix4();
-	final Matrix4 spriteMatrix = new Matrix4();
+	private final Matrix4 floorMatrix = new Matrix4();
+	private final Matrix4 wallMatrix = new Matrix4();
+	private final Matrix4 spriteMatrix = new Matrix4();
 
-	FrameBuffer fbo;
+	private FrameBuffer fbo;
 
 	public Map map;
 
@@ -63,7 +63,6 @@ public class LudumDare31 extends ApplicationAdapter implements InputProcessor {
 
 	@Override
 	public void create () {
-
 		instance = this;
 
 		floorBatch = new SpriteBatch();
@@ -118,7 +117,6 @@ public class LudumDare31 extends ApplicationAdapter implements InputProcessor {
 
 	@Override
 	public void render () {
-
 		spriteMatrix.setToRotation(new Vector3(0,1,0), 25);
 		spriteMatrix.rotate(new Vector3(0,0,1), -10);
 
@@ -157,7 +155,6 @@ public class LudumDare31 extends ApplicationAdapter implements InputProcessor {
 
 	@Override
 	public void dispose() {
-
 		fbo.dispose();
 		bufferBatch.dispose();
 		rightWallBatch.dispose();
@@ -165,14 +162,12 @@ public class LudumDare31 extends ApplicationAdapter implements InputProcessor {
 		floorBatch.dispose();
 	}
 
-	final Plane xzPlane = new Plane(new Vector3(0, 0, 1), 0);
-	final Vector3 intersection = new Vector3();
+	private final Plane xzPlane = new Plane(new Vector3(0, 0, 1), 0);
+	private final Vector3 intersection = new Vector3();
 	public Sprite lastSelectedTile = null;
 
 	@Override
 	public boolean keyDown(int keycode) {
-
-		System.out.println(Gdx.graphics.getFramesPerSecond());
 		return false;
 	}
 
@@ -188,9 +183,7 @@ public class LudumDare31 extends ApplicationAdapter implements InputProcessor {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-
 		if(map.hasLost) {
-
 			map = new Map(11,11);
 			return false;
 		}
@@ -215,17 +208,16 @@ public class LudumDare31 extends ApplicationAdapter implements InputProcessor {
 			}
 		}
 
-		if(sprite != null)
+		if(sprite != null) {
 			lastSelectedTile = sprite;
+		}
 
 		return false;
 	}
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-
 		if(lastSelectedTile != null) {
-
 			Ray ray = cam.getPickRay(screenX, screenY);
 			Intersector.intersectRayPlane(ray, xzPlane, intersection);
 
@@ -239,7 +231,6 @@ public class LudumDare31 extends ApplicationAdapter implements InputProcessor {
 
 			for(Sprite sp : map.entities) {
 				if(sp instanceof HospitalBed) {
-
 					float dist = (float) Math.sqrt(Math.pow(Math.abs(x - sp.getX()), 2) + Math.pow(Math.abs(y - sp.getY()), 2));
 
 					if(dist < shortest && dist < 3) {
@@ -250,7 +241,6 @@ public class LudumDare31 extends ApplicationAdapter implements InputProcessor {
 			}
 
 			for(Room sp : map.rooms) {
-
 				float dist = (float) Math.sqrt(Math.pow(Math.abs(x - sp.door.getX()), 2) + Math.pow(Math.abs(7 + y - sp.door.getY()), 2));
 
 				if(dist < shortest && dist < 1) {
@@ -275,9 +265,9 @@ public class LudumDare31 extends ApplicationAdapter implements InputProcessor {
 		return false;
 	}
 
-	final Vector3 curr = new Vector3();
-	final Vector3 last = new Vector3(-1, -1, -1);
-	final Vector3 delta = new Vector3();
+	private final Vector3 curr = new Vector3();
+	private final Vector3 last = new Vector3(-1, -1, -1);
+	private final Vector3 delta = new Vector3();
 
 	@Override
 	public boolean touchDragged(int x, int y, int pointer) {

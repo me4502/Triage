@@ -5,14 +5,12 @@ import com.me4502.LudumDare31.entities.Entity;
 import com.me4502.LudumDare31.injuries.Injury;
 
 public class Patient extends Entity {
-
-	PatientType type;
+	private PatientType type;
 	public Injury injury;
 
 	public float health = 1f;
 
 	public Patient(PatientType type, Injury injury) {
-
 		super(type.getTexture());
 
 		this.type = type;
@@ -20,13 +18,10 @@ public class Patient extends Entity {
 
 		setSize(2, 1);
 
-		System.out.println(injury.toString());
-
 		health *= injury.getSeverity().getHealthMultiplier();
 	}
 
 	public float getHealth() {
-
 		return health;
 	}
 
