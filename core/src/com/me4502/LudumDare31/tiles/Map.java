@@ -17,7 +17,6 @@ import com.me4502.LudumDare31.injuries.Injury;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class Map {
 
@@ -40,7 +39,7 @@ public class Map {
 
 		for(int x = 0; x < floorTiles.length; x++) {
 			for(int y = 0; y < floorTiles[x].length; y++) {
-				floorTiles[x][y] = new Sprite(LudumDare31.instance.floors[ThreadLocalRandom.current().nextInt(LudumDare31.instance.floors.length)]);
+				floorTiles[x][y] = new Sprite(LudumDare31.instance.floors[LudumDare31.RANDOM.nextInt(LudumDare31.instance.floors.length)]);
 				floorTiles[x][y].setSize(1, 1);
 				floorTiles[x][y].setPosition(x, y);
 			}

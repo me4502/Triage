@@ -1,6 +1,6 @@
 package com.me4502.LudumDare31.injuries;
 
-import java.util.concurrent.ThreadLocalRandom;
+import com.me4502.LudumDare31.LudumDare31;
 
 public class Injury {
 	private final InjuryType type;
@@ -20,8 +20,8 @@ public class Injury {
 	}
 
 	public static Injury generateInjury() {
-		InjuryType type = InjuryType.values()[ThreadLocalRandom.current().nextInt(InjuryType.values().length)];
-		InjurySeverity severity = InjurySeverity.convertFloatToSeverity(ThreadLocalRandom.current().nextFloat());
+		InjuryType type = InjuryType.values()[LudumDare31.RANDOM.nextInt(InjuryType.values().length)];
+		InjurySeverity severity = InjurySeverity.convertFloatToSeverity(LudumDare31.RANDOM.nextFloat());
 
 		return new Injury(type, severity);
 	}
