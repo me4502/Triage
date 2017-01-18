@@ -34,11 +34,16 @@ public class Bubble extends Entity {
 		button.setPosition(getX(), getY());
 	}
 
+	public void drawBubble(SpriteBatch batch) {
+		button.draw(batch);
+		this.draw(batch);
+	}
+
 	@Override
 	public void render(SpriteBatch top, SpriteBatch left, SpriteBatch right) {
 		Matrix4 orig = right.getTransformMatrix().cpy();
 
-		if(!equals(LudumDare31.instance.lastSelectedTile)) {
+		if(!this.equals(LudumDare31.instance.lastSelectedTile)) {
 			if(boundRoom != null) {
 				button.setPosition(getX(), getY());
 			} else if(boundSprite != null) {
@@ -51,12 +56,12 @@ public class Bubble extends Entity {
 			((HospitalBed) boundSprite).doMoveTick(this);
 
 			if(boundSprite != null) {
-				if(((HospitalBed) boundSprite).rotation == 0)
+				if(((HospitalBed) boundSprite).rotation == 0) {
 					setX(boundSprite.getX() - 7);
+				}
 				right.getTransformMatrix().translate(0, 0, ((HospitalBed) boundSprite).leftDepthTransform + 7);
 
 				if(((HospitalBed) boundSprite).passenger == null) {
-
 					setStartPosition();
 				}
 			}
@@ -71,8 +76,7 @@ public class Bubble extends Entity {
 		}
 
 		right.begin();
-		button.draw(right);
-		this.draw(right);
+		drawBubble(right);
 		right.end();
 
 		right.setTransformMatrix(orig);

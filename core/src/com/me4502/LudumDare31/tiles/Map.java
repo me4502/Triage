@@ -94,7 +94,6 @@ public class Map {
 	}
 
 	public void render(SpriteBatch floorBatch, SpriteBatch leftWallBatch, SpriteBatch rightWallBatch) {
-
 		floorBatch.begin();
         for (Sprite[] floorTile : floorTiles) {
             for (Sprite tile : floorTile) {
@@ -105,32 +104,25 @@ public class Map {
 		floorBatch.end();
 
 		leftWallBatch.begin();
-
         for (Sprite leftWallTile : leftWallTiles) {
             leftWallTile.draw(leftWallBatch);
         }
-
 		leftWallBatch.end();
 
 		rightWallBatch.begin();
-
         for (Sprite rightWallTile : rightWallTiles) {
             rightWallTile.draw(rightWallBatch);
         }
-
 		rightWallBatch.end();
 
 		for(Entity ent : entities) {
-
 			ent.render(floorBatch, leftWallBatch, rightWallBatch);
 		}
 
 		rightWallBatch.begin();
-
 		for(Room room : rooms) {
 			room.render(rightWallBatch);
 		}
-
 		rightWallBatch.end();
 
 		Iterator<Entity> iter = entities.iterator();
@@ -148,27 +140,16 @@ public class Map {
 
 		if(!hasLost && bedCount == 0 && Math.random() > 0.95f) {
 			Entity ent = new HospitalBed(LudumDare31.instance.bed_top, new Patient(PatientType.getRandom(), Injury.generateInjury()));
-
 			ent.setPosition(-8 + 0.1f,0 + 0.1f);
-
 			entities.add(0, ent);
 		}
 
 		LudumDare31.instance.fontBatch.begin();
-
-		if(hasLost) {
-			LudumDare31.instance.font.setColor(Color.WHITE);
-			glyphLayout.setText(LudumDare31.instance.font, "Click to Replay");
-			LudumDare31.instance.font.draw(LudumDare31.instance.fontBatch, "Click to Replay", Gdx.graphics.getWidth() / 2 - glyphLayout.width/2, 35);
-
-			LudumDare31.instance.fontBatch.end();
-		} else {
-			LudumDare31.instance.font.setColor(Color.WHITE);
-			glyphLayout.setText(LudumDare31.instance.font, "Score: " + score);
-			LudumDare31.instance.font.draw(LudumDare31.instance.fontBatch, "Score: " + score, Gdx.graphics.getWidth() / 2 - glyphLayout.width/2, 35);
-
-			LudumDare31.instance.fontBatch.end();
-		}
+		LudumDare31.instance.font.setColor(Color.WHITE);
+		String text = hasLost ? "Click to Replay" : "Score: " + score;
+		glyphLayout.setText(LudumDare31.instance.font, text);
+		LudumDare31.instance.font.draw(LudumDare31.instance.fontBatch, text, Gdx.graphics.getWidth() / 2 - glyphLayout.width/2, 35);
+		LudumDare31.instance.fontBatch.end();
 
 		if(score < 0) {
 			hasLost = true;

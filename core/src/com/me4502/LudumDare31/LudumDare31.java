@@ -57,6 +57,7 @@ public class LudumDare31 extends ApplicationAdapter implements InputProcessor {
 
 	private final Matrix4 floorMatrix = new Matrix4();
 	private final Matrix4 wallMatrix = new Matrix4();
+	private final Matrix4 leftWallMatrix = new Matrix4();
 	private final Matrix4 spriteMatrix = new Matrix4();
 
 	private FrameBuffer fbo;
@@ -75,7 +76,7 @@ public class LudumDare31 extends ApplicationAdapter implements InputProcessor {
 		bufferBatch = new SpriteBatch();
 		fontBatch = new SpriteBatch();
 
-		fbo = new FrameBuffer(Format.RGBA8888, (int)(Gdx.graphics.getWidth() * 2f), (int)(Gdx.graphics.getHeight() * 2f), false);
+		fbo = new FrameBuffer(Format.RGB888, (int)(Gdx.graphics.getWidth() * 2f), (int)(Gdx.graphics.getHeight() * 2f), false);
 
 		Texture cleanFloor = new Texture("data/tiles/floor_clean.png");
 
@@ -107,7 +108,7 @@ public class LudumDare31 extends ApplicationAdapter implements InputProcessor {
 
 		floorMatrix.setToRotation(new Vector3(1, 0, 0), 90);
 		wallMatrix.setToRotation(new Vector3(1, 0, 0), 180);
-
+		leftWallMatrix.setToRotation(new Vector3(1, 0, 0), 180).rotate(new Vector3(0,1,0), -90f);
 		spriteMatrix.setToRotation(new Vector3(0, 1, 0),  -Gdx.graphics.getHeight() / (float)Gdx.graphics.getWidth());
 
 		Gdx.input.setInputProcessor(this);
@@ -121,39 +122,29 @@ public class LudumDare31 extends ApplicationAdapter implements InputProcessor {
 
 	@Override
 	public void render () {
-		spriteMatrix.setToRotation(new Vector3(0,1,0), 25);
-		spriteMatrix.rotate(new Vector3(0,0,1), -10);
-
 		cam.update();
 
 		floorBatch.setProjectionMatrix(cam.combined);
 		floorBatch.setTransformMatrix(floorMatrix);
 
 		leftWallBatch.setProjectionMatrix(cam.combined);
-		leftWallBatch.setTransformMatrix(wallMatrix.cpy().rotate(new Vector3(0,1,0), -90f));
+		leftWallBatch.setTransformMatrix(leftWallMatrix);
 
 		rightWallBatch.setProjectionMatrix(cam.combined);
 		rightWallBatch.setTransformMatrix(wallMatrix);
 
 		fbo.begin();
-
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
 		map.render(floorBatch, leftWallBatch, rightWallBatch);
-
 		fbo.end();
 
 		bufferBatch.begin();
-
 		TextureRegion region = new TextureRegion(fbo.getColorBufferTexture());
-
 		region.flip(false, true);
-
 		bufferBatch.disableBlending();
 		bufferBatch.draw(region, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		bufferBatch.enableBlending();
-
 		bufferBatch.end();
 	}
 
@@ -203,7 +194,6 @@ public class LudumDare31 extends ApplicationAdapter implements InputProcessor {
 
 		for(Sprite sp : map.entities) {
 			if(sp instanceof Bubble) {
-
 				float dist = (float) Math.sqrt(Math.pow(Math.abs(x - sp.getX()), 2) + Math.pow(Math.abs(y - sp.getY()), 2));
 				if(dist < shortest && dist < 1) {
 					shortest = dist;
@@ -235,7 +225,9 @@ public class LudumDare31 extends ApplicationAdapter implements InputProcessor {
 
 			for(Sprite sp : map.entities) {
 				if(sp instanceof HospitalBed) {
-					float dist = (float) Math.sqrt(Math.pow(Math.abs(x - sp.getX()), 2) + Math.pow(Math.abs(y - sp.getY()), 2));
+					float bedX = sp.getX();
+					float bedY = sp.getY();
+					float dist = (float) Math.sqrt(Math.pow(Math.abs(x - bedX), 2) + Math.pow(Math.abs(y - bedY), 2));
 
 					if(dist < shortest && dist < 3) {
 						shortest = dist;
@@ -245,7 +237,9 @@ public class LudumDare31 extends ApplicationAdapter implements InputProcessor {
 			}
 
 			for(Room sp : map.rooms) {
-				float dist = (float) Math.sqrt(Math.pow(Math.abs(x - sp.door.getX()), 2) + Math.pow(Math.abs(7 + y - sp.door.getY()), 2));
+				float doorX = sp.door.getX() + sp.door.getWidth()/2;
+				float doorY = sp.door.getY() + sp.door.getHeight()/2;
+				float dist = (float) Math.sqrt(Math.pow(Math.abs(x - doorX), 2) + Math.pow(Math.abs(7 + y - doorY), 2));
 
 				if(dist < shortest && dist < 1) {
 					shortest = dist;
@@ -275,7 +269,6 @@ public class LudumDare31 extends ApplicationAdapter implements InputProcessor {
 
 	@Override
 	public boolean touchDragged(int x, int y, int pointer) {
-
 		Ray pickRay = cam.getPickRay(x, y);
 		Intersector.intersectRayPlane(pickRay, xzPlane, curr);
 
@@ -285,7 +278,6 @@ public class LudumDare31 extends ApplicationAdapter implements InputProcessor {
 			delta.sub(curr);
 			if(lastSelectedTile != null)
 				lastSelectedTile.setPosition(curr.x - 0.4f, -curr.y - 0.4f);
-			//cam.position.add(delta.x, delta.y, delta.z);
 		}
 		last.set(x, y, 0);
 
@@ -299,11 +291,6 @@ public class LudumDare31 extends ApplicationAdapter implements InputProcessor {
 
 	@Override
 	public boolean scrolled(int amount) {
-
-		//cam.zoom += amount*0.1;
-
-		if(cam.zoom < 0.1) cam.zoom = 0.1f;
-
 		return false;
 	}
 }
