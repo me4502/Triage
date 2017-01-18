@@ -7,6 +7,5 @@
 	<entry-point class='com.me4502.LudumDare31.client.HtmlLauncher' />
 	
 	<set-configuration-property name="gdx.assetpath" value="../core/assets" />
-
 	<set-configuration-property name='xsiframe.failIfScriptTag' value='FALSE' />
 </module>
